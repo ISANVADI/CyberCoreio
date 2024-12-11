@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - CyberCore</title>
+    <link rel="stylesheet" href="стили.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #product-list {
+            margin-top: 20px;
+        }
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .product h3 {
+            margin: 0;
+        }
+        button {
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Корзина товаров</h1>
+        <nav>
+            <ul>
+                <li><a href="catalog.html">Каталог</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="product-list"></div>
+        <button id="show-most-expensive">Показать самый дорогой товар</button>
+        <button id="clear-cart">Очистить корзину</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CyberCore. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // Функция для отображения товаров в корзине
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+
+            if (cart.length === 0) {
+                productList.innerHTML = '<p>Ваша корзина пуста.</p>';
+                return;
+            }
+
+            cart.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product';
+                productElement.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>Цена: ${product.price} ₽</p>
+                `;
+                productList.appendChild(productElement);
+            });
+        }
+
+        // Функция для показа самого дорогого товара
+        function showMostExpensive() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Ваша корзина пуста.');
+                return;
+            }
+
+            const mostExpensive = cart.reduce((prev, current) => (prev.price > current.price) ? prev : current);
+            alert(`Самый дорогой товар: ${mostExpensive.name} - ${mostExpensive.price} ₽`);
+        }
+
+        // Функция для очистки корзины
+        function clearCart() {
+            localStorage.removeItem('cart');
+            displayCart();
+        }
+
+        document.getElementById('show-most-expensive').onclick = showMostExpensive;
+        document.getElementById('clear-cart').onclick = clearCart;
+
+        // Инициализация отображения товаров в корзине
+        displayCart();
+    </script>
+</body>
+</html>

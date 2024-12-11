@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Интернет-магазин</title>
+<link rel="stylesheet" href="стили.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+																/* Стили для шапки */
+        #header-title {
+            background-color: #e0e0ff;
+            padding: 10px;
+            border-radius: 8px;  
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5em;
+            text-align: center;
+            color: purple;
+        }
+
+															/* Логотип */
+        #logo {
+            display: block;
+            margin: 0 auto;
+            width: auto;
+            height: 200px;
+            color: green
+        }
+
+															/* Подзаголовок */
+        #subtitle {
+            font-family: 'Verdana', sans-serif;
+            font-size: 1.2em;
+            text-align: center;
+            color: blue;
+        }
+
+															/* Навигация */
+        nav ul {
+            list-style-type: none;
+            text-align: center;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+														/* Стили для каталога */
+        .form-section {
+            margin-top: 20px;
+        }
+
+													/* Пример использования комбинации классов и псевдокласса */
+        .main-container ul li a:hover {
+            color: darkred;
+            text-decoration: none;
+        }
+
+													/* Маркированные списки */
+        ul li ul li:first-child {
+            color: green;
+        }
+
+													/* Обтекание изображения */
+        .float-img {
+            float: left;
+            margin-right: 15px;
+            width: 150px;
+            height: auto;
+        }
+
+														/* Стили для таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        table th {
+            background-color: lightblue;
+        }
+
+																/* Псевдоклассы */
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+															/* Стили для обратной связи */
+        #contact-form input:required {
+            border: 2px solid red;
+        }
+
+        #contact-form input:focus {
+            border-color: green;
+        }
+
+															/* Пример использования селектора по атрибуту */
+        a[href^="https"] {
+            color: navy;
+        }
+
+															/* Новый класс с приоритетом */
+        .special-style {
+            color: orange;
+        }
+
+															/* Стиль с приоритетом через !important */
+        .override {
+            color: red !important;
+        }
+		.styled-text {
+    border: 1px solid black; /* Видимая граница */
+    padding-left: 3cm; /* Левый отступ */
+    padding-right: 1cm; /* Правый отступ */
+    padding-top: 2cm; /* Верхний отступ */
+    padding-bottom: 2cm; /* Нижний отступ */
+    background-color: #d3d3d3; /* Светло-серый фон */
+    font-family: 'Times New Roman', serif; /* Гарнитура Times New Roman */
+    font-size: 14pt; /* Кегль текста 14 пт */
+    text-indent: 1.5cm; /* Абзацный отступ */
+}
+
+.styled-text::first-letter {
+    font-size: 18pt; /* Буквица для первого символа */
+    font-weight: bold; /* Можно сделать букву жирной */
+} 
+.product-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-title {
+    font-weight: bold;
+}
+
+.computer {
+    color: blue;
+}
+
+.accessory {
+    color: green;
+}
+
+#filter-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#filter-buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+#filter-buttons button:hover {
+    background-color: #45a049;
+}
+
+
+.product {
+    display: none; /* Изначально скрыты */
+    padding: 20px;
+    margin: 10px;
+    border: none;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    width: 200px;
+    text-align: center;
+}
+
+/* Стиль для видимых товаров */
+.product.show {
+    display: block;
+}
+
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.product-box {
+    width: 250px;
+    height: 300px;
+    margin: 20px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.product-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.product-front, .product-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-back {
+    transform: rotateY(180deg);
+}
+
+.product-box.flipped .product-inner {
+    transform: rotateY(180deg);
+}
+.details {
+    display: none;
+}
+
+/* Стили svg */
+#canvas-container {
+            width: 100%;
+            height: 400px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 2px solid #000;
+        }
+        #blinking-text {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #007bff;
+    margin-top: 20px;
+}
+    </style>
+</head>
+<body>
+        <h1>Магазин: CyberCore</h1>
+
+																			<!-- Шапка сайта -->
+<header class="header" style="position: relative;">
+    <h1 id="header-title">
+        <span style="color: red;"><b>И</b></span>нтернет-магазин<i>"CyberCore"</i>
+    </h1>
+    <img id="logo" src="logo.jpeg" alt="Логотип CyberCore">
+    <p id="subtitle"><strong><i>Надежность и качество техники для всех</i></strong></p>
+</header>
+
+																			<!-- Навигация -->
+<nav class="nav">
+    <ul>
+        <li><a href=#catalog>Каталог товаров</a></li>
+        <li><a href="#new-catalog">Каталог аксессуаров</a></li>
+        <li><a href="я2.html">О нас</a></li>
+        <li><a href="https://hyperx.com">Наши партнеры</a></li>
+        <li><a href="catalog.html">Анализ</a></li>
+    </ul>
+</nav>
+
+																		<!-- Основной контент -->
+<main class="main-container">
+    <div id="blinking-text">
+        Добро пожаловать на наш сайт!
+    </div>
+																		<!-- Каталог товаров -->
+                            
+<div id="app">
+    <!-- Поле для ввода текста фильтрации -->
+    <div>
+        <label for="filter">Фильтр товаров:</label>
+        <input id="filter" v-model="filterText" placeholder="Введите название товара">
+        <!-- Привязка `v-model` обеспечивает двустороннее связывание данных для ввода текста -->
+    </div>
+
+    <!-- Форма для добавления нового товара -->
+    <div>
+        <h3>Добавить новый товар:</h3>
+    <input v-model="newProduct.name" placeholder="Название">
+    <input v-model="newProduct.cpu" placeholder="Процессор">
+    <input v-model="newProduct.ram" placeholder="Оперативная память">
+    <input v-model="newProduct.price" placeholder="Цена" type="number">
+    <input v-model="newProduct.details" placeholder="Описание">
+    <button @click="addProduct">Добавить</button>
+</div>
+
+    <!-- Перебор массива отфильтрованных товаров и отображение их карточек -->
+<div v-for="(product, index) in filteredProducts" :key="index" class="product-card">
+    <h3>{{ product.name }}</h3>
+    <p><b>Процессор:</b> {{ product.cpu }}</p>
+    <p><b>Оперативная память:</b> {{ product.ram }}</p>
+    <p><b>Цена:</b> ${{ product.price }}</p>
+    <button @click="toggleDetails(index)">
+        {{ product.showDetails ? 'Скрыть детали' : 'Показать детали' }}
+    </button>
+    <div v-if="product.showDetails">
+        <p>{{ product.details }}</p>
+    </div>
+
+    <!-- Поле для изменения цены для каждого товара -->
+    <div>
+        <input 
+            v-model="product.newPrice" 
+            type="text" 
+            placeholder="Введите новую цену" 
+            @input="updatePrice(index)" 
+            maxlength="5" 
+        />
+    </div>
+</div>
+    
+    <div id="catalog" class="form-section">
+        <h2 class="special-style">Каталог товаров</h2>
+        <p>У нас можно купить <b>компьютеры</b>, <i>комплектующие</i> и другие полезные устройства.</p>
+<div class="styled-text">
+            Товары в нашем магазине отличаются высоким качеством и надежностью. 
+            Мы предлагаем разнообразные модели компьютеров, периферийных устройств и аксессуаров. Благодаря нашему ассортименту вы сможете 
+            выбрать то, что подходит именно вам.
+        </div>
+
+        <h3>Компьютеры:</h3>
+    <div id="product-list">
+        <div class="product computer">
+        <ol>
+            <li><font color="brown"><strong>Игровые компьютеры</strong></font></li>
+            <li><font color="pink"><i>Офисные компьютеры</i></font></li>
+            <li><font color="red"><b><i>Компьютеры для дома</i></b></font></li>
+        </ol>
+        </div>
+        <div class="product computer">
+        <h3><b>Комплектующие:</b></h3>
+        <ul>
+            <li>Процессоры</li>
+            <li>Видеокарты</li>
+            <li>Жесткие диски</li>
+            <li>Оперативная память
+                <ul>
+                    <li>DDR4</li>
+                    <li>DDR5</li>
+                </ul>
+            </li>
+        </ul>
+        </div>
+    </div>
+
+																		<!-- Каталог аксессуаров -->
+    <div id="new-catalog" class="form-section">
+        <h2 class="override">Каталог аксессуаров</h2>
+        <p>Выберите из нашего широкого ассортимента <b>периферийных устройств</b> и <i>аксессуаров</i> для вашего компьютера.</p>
+        <div class="product accessory">
+        <h3>Мониторы:</h3>
+        <ol>
+            <li><font color="darkblue"><strong>Игровые мониторы</strong></font></li>
+            <li><font color="teal"><i>Мониторы для работы</i></font></li>
+            <li><font color="purple"><b><i>Мониторы для дома</i></b></font></li>
+        </ol>
+        </div>
+
+    <div class="product accessory">
+        <h3>Периферийные устройства:</h3>
+        <ul>
+            <li>Клавиатуры
+                <ul>
+                    <li>Механические клавиатуры</li>
+                    <li>Мембранные клавиатуры</li>
+                </ul>
+            </li>
+            <li>Мыши
+                <ul>
+                    <li>Игровые мыши</li>
+                    <li>Беспроводные мыши</li>
+                </ul>
+            </li>
+            <li><b>Наушники</b></li>
+        </ul>
+        </div>
+    </div>
+
+																			<!-- Таблица с товарами -->
+    <div class="form-section">
+        <h2><b>Сравнение товаров</b></h2>
+        <table border="1" width="100%" cellpadding="10" cellspacing="0" style="border-collapse: collapse;">
+            <caption style="font-size: 16pt; font-weight: bold; color: blue;">Таблица сравнения характеристик компьютеров</caption>
+            <thead>
+                <tr>
+                    <th style="text-align: center;">Модель</th>
+                    <th style="text-align: center;">Процессор</th>
+                    <th style="text-align: center;">Оперативная память</th>
+                    <th style="text-align: center;">Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: justify; background-color: white;"><font color="lightgreen"><strong>Игровой ПК</strong></font></td>
+                    <td style="text-align: center; background-color: #e0f7fa;">Intel Core i9</td>
+                    <td style="text-align: center; background-color: white;">16 GB</td>
+                    <td style="text-align: center; background-color: #e0f7fa;">1000$</td>
+                </tr>
+                <tr>
+                    <td style="text-align: justify; background-color: white;"><font color="orange"><strong>Ультра ПК</strong></font></td>
+                    <td style="text-align: center; background-color: #e0f7fa;">AMD Ryzen 9</td>
+                    <td style="text-align: center; background-color: white;">16 GB</td>
+                    <td style="text-align: center; background-color: #e0f7fa;">950$</td>
+                </tr>
+                <tr>
+                    <td style="text-align: justify; background-color: white;"><font color="lightblue"><i>Офисный ПК</i></font></td>
+                    <td style="text-align: center; background-color: #e0f7fa;">Intel Core i5</td>
+                    <td style="text-align: center; background-color: white;">8 GB</td>
+                    <td style="text-align: center; background-color: #e0f7fa;">500$</td>
+                </tr>
+                <tr>
+                    <td style="text-align: justify; background-color: white;"><font color="gray"><b>Домашний ПК</b></font></td>
+                    <td style="text-align: center; background-color: #e0f7fa;">AMD Ryzen 5</td>
+                    <td style="text-align: center; background-color: white;">8 GB</td>
+                    <td style="text-align: center; background-color: #e0f7fa;">450$</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+																		<!-- Обратная связь -->
+    <div id="feedback" class="form-section">
+        <h2><b>Свяжитесь с нами</b></h2>
+        <form id="contact-form" action="submit_form.php" method="post">
+            <label for="name">Имя (обязательно):</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="email">Электронная почта (обязательно):</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="message">Сообщение:</label><br>
+            <textarea id="message" name="message"></textarea><br><br>
+
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+    <div id="product-list">
+    </div>
+        <div id="product-gallery" class="product-container">
+        </div>
+    </div>
+
+<canvas id="computerCanvas" width="600" height="400"></canvas>
+
+<script src="canvas.js"></script>
+<script src="sort.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="jq.js"></script>
+
+<script>
+const app = Vue.createApp({
+    data() {
+        return {
+            // Массив товаров с уникальными данными (details) и состоянием отображения (showDetails)
+            products: [
+                { 
+                    name: 'Игровой ПК', 
+                    cpu: 'Intel Core i9', 
+                    ram: '16 GB', 
+                    price: 1000, 
+                    details: 'Отличный выбор для геймеров.', 
+                    showDetails: false,
+                    newPrice: null // Поле для новой цены
+                },
+                { 
+                    name: 'Ультра ПК', 
+                    cpu: 'AMD Ryzen 9', 
+                    ram: '16 GB', 
+                    price: 950, 
+                    details: 'Подходит для профессиональной работы с видео.', 
+                    showDetails: false,
+                    newPrice: null
+                },
+                { 
+                    name: 'Офисный ПК', 
+                    cpu: 'Intel Core i5', 
+                    ram: '8 GB', 
+                    price: 500, 
+                    details: 'Оптимально для работы с документами.', 
+                    showDetails: false,
+                    newPrice: null
+                },
+                { 
+                    name: 'Домашний ПК', 
+                    cpu: 'AMD Ryzen 5', 
+                    ram: '8 GB', 
+                    price: 450, 
+                    details: 'Идеален для повседневного использования.', 
+                    showDetails: false,
+                    newPrice: null
+                }
+            ],
+            // Строка для фильтрации товаров
+            filterText: '',
+            // Объект для добавления нового товара с инициализацией значений
+            newProduct: { name: '', cpu: '', ram: '', price: '', details: '', showDetails: false }
+        };
+    },
+    computed: {
+        // Отфильтрованный список товаров по названию
+        filteredProducts() {
+            return this.products.filter(product => 
+                product.name.toLowerCase().includes(this.filterText.toLowerCase()) // Сравнение с учётом регистра
+            );
+        }
+    },
+    methods: {
+        // Переключение состояния отображения деталей товара
+        toggleDetails(index) {
+            this.products[index].showDetails = !this.products[index].showDetails; // Меняет true на false и наоборот
+        },
+        // Добавление нового товара в список
+        addProduct() {
+            // Проверка, что все поля заполнены
+            if (this.newProduct.name && this.newProduct.cpu && this.newProduct.ram && this.newProduct.price && this.newProduct.details) {
+                // Добавление нового товара в массив с деструктуризацией объекта
+                this.products.push({ ...this.newProduct, showDetails: false, newPrice: null });
+                // Сброс значений формы
+                this.newProduct = { name: '', cpu: '', ram: '', price: '', details: '', showDetails: false };
+            }
+        },
+        // Метод для изменения цены товара автоматически при вводе
+        updatePrice(index) {
+            const product = this.products[index];
+            
+            // Преобразуем введённое значение в число, убираем лишние символы и проверяем длину
+            let newPrice = product.newPrice.replace(/\D/g, ''); // Убираем все нецифровые символы
+
+            // Ограничиваем ввод до 5 цифр
+            if (newPrice.length > 5) {
+                newPrice = newPrice.slice(0, 5); // Оставляем только первые 5 цифр
+            }
+
+            // Обновляем поле newPrice
+            product.newPrice = newPrice;
+
+            // Если введено число и оно больше 0, обновляем цену
+            if (newPrice && !isNaN(newPrice) && parseInt(newPrice) > 0) {
+                product.price = parseInt(newPrice); // Изменение цены товара
+            }
+        }
+    }
+});
+
+// Связывает экземпляр Vue с HTML-элементом с id="app"
+app.mount('#app');
+    </script>
+
+</main>
+
+																	<!-- Подвал сайта -->
+<footer>
+    <p style="text-align: center;">&copy; 2024 CyberCore. Все права защищены.</p>
+</footer>
+
+</body>
+</html>
